@@ -1,10 +1,9 @@
-﻿using Gatherly.Domain.Repositories;
-using System.Diagnostics.Metrics;
-using System.Threading;
+﻿using Gatherly.Domain.Enums;
+using Gatherly.Domain.Primitives;
 
 namespace Gatherly.Domain.Entities;
 
-public class Gathering
+public sealed class Gathering : Entity
 {
     private readonly List<Invitation> _invitations = new();
     private readonly List<Attendee> _attendees = new();
@@ -16,8 +15,8 @@ public class Gathering
         DateTime scheduledAtUtc,
         string name,
         string? location)
+        : base(id)
     {
-        Id = id;
         Creator = creator;
         Type = type;
         ScheduledAtUtc = scheduledAtUtc;
@@ -25,7 +24,6 @@ public class Gathering
         Location = location;
     }
 
-    public Guid Id { get; private set; }
     public Member Creator { get; private set; }
     public GatheringType Type { get; private set; }
     public string Name { get; private set; }
@@ -46,7 +44,7 @@ public class Gathering
         string? location,
         int? maximumNumberOfAttendees,
         int? invitationsValidBeforeInHours)
-    {        
+    {
         var gathering = new Gathering(
             id,
             creator,
