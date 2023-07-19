@@ -1,4 +1,4 @@
-﻿namespace Presentation;
+﻿namespace Domain;
 
 public class AssemblyReference
 {

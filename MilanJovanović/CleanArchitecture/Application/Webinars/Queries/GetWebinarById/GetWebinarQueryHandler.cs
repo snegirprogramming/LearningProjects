@@ -7,11 +7,11 @@ using Domain.Exceptions;
 
 namespace Application.Webinars.Queries.GetWebinarById;
 
-internal sealed class GetWebinarByIdQueryHandler : IQueryHandler<GetWebinarByIdQuery, WebinarResponse>
+internal sealed class GetWebinarQueryHandler : IQueryHandler<GetWebinarByIdQuery, WebinarResponse>
 {
     private readonly IDbConnection _dbConnection;
 
-    public GetWebinarByIdQueryHandler(IDbConnection dbConnection) => _dbConnection = dbConnection;
+    public GetWebinarQueryHandler(IDbConnection dbConnection) => _dbConnection = dbConnection;
 
     public async Task<WebinarResponse> Handle(
         GetWebinarByIdQuery request,

@@ -1,4 +1,4 @@
-﻿namespace Presentation;
+﻿namespace Infrastructure;
 
 public class AssemblyReference
 {
