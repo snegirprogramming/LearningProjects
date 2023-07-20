@@ -1,3 +1,5 @@
+using FluentValidation;
+using Gatherly.Application.Behaviors;
 using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,11 @@ builder
             .WithScopedLifetime());
 
 builder.Services.AddMediatR(Gatherly.Application.AssemblyReference.Assembly);
+
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+
+builder.Services.AddValidatorsFromAssembly(Gatherly.Application.AssemblyReference.Assembly,
+    includeInternalTypes: true);
 
 builder
     .Services
