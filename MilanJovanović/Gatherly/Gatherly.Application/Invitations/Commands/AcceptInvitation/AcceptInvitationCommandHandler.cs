@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Gatherly.Application.Invitations.Commands.AcceptInvitation;
 
-internal sealed class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCommand, Unit>
+internal sealed class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCommand>
 {
     private readonly IInvitationRepository _invitationRepository;
     private readonly IMemberRepository _memberRepository;

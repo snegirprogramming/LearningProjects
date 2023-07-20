@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Gatherly.Application.Gatherings.Commands.CreateGathering;
 
-internal sealed class CreateGatheringCommandHandler : IRequestHandler<CreateGatheringCommand, Unit>
+internal sealed class CreateGatheringCommandHandler : IRequestHandler<CreateGatheringCommand>
 {
     private readonly IMemberRepository _memberRepository;
     private readonly IGatheringRepository _getheringRepository;

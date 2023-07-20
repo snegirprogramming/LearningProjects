@@ -2,4 +2,4 @@
 
 namespace Gatherly.Application.Invitations.Commands.AcceptInvitation;
 
-public sealed record AcceptInvitationCommand(Guid GatheringId, Guid InvitationId) : IRequest<Unit>;
+public sealed record AcceptInvitationCommand(Guid GatheringId, Guid InvitationId) : IRequest;

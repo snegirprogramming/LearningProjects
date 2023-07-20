@@ -10,4 +10,4 @@ public sealed record CreateGatheringCommand(
     string Name,
     string? Location,
     int? MaximumNumberOfAttendees,
-    int? InvitationsValidBeforeInHours) : IRequest<Unit>;
+    int? InvitationsValidBeforeInHours) : IRequest;

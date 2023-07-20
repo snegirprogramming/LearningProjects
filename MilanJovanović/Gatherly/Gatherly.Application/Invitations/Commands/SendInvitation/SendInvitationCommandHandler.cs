@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Gatherly.Application.Invitations.Commands.SendInvitation;
 
-internal sealed class SendInvitationCommandHandler : IRequestHandler<SendInvitationCommand, Unit>
+internal sealed class SendInvitationCommandHandler : IRequestHandler<SendInvitationCommand>
 {
     private readonly IMemberRepository _memberRepository;
     private readonly IGatheringRepository _gatheringRepository;

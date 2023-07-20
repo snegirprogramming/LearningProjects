@@ -1,16 +1,17 @@
-﻿using Gatherly.Domain.Entities;
+﻿using Gatherly.Application.Abstractions.Messaging;
+using Gatherly.Domain.Entities;
 using Gatherly.Domain.Repositories;
+using Gatherly.Domain.Shared;
 using Gatherly.Domain.ValueObjects;
-using MediatR;
 
 namespace Gatherly.Application.Members.Commands.CreateMemeber;
 
-internal sealed class CreateMemeberCommnadHandler : IRequestHandler<CreateMemeberCommnad, Unit>
+internal sealed class CreateMemeberCommandHandler : ICommandHandler<CreateMemeberCommand>
 {
     private readonly IMemberRepository _memberRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateMemeberCommnadHandler(
+    public CreateMemeberCommandHandler(
         IMemberRepository memberRepository,
         IUnitOfWork unitOfWork)
     {
@@ -18,7 +19,7 @@ internal sealed class CreateMemeberCommnadHandler : IRequestHandler<CreateMemebe
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Unit> Handle(CreateMemeberCommnad request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(CreateMemeberCommand request, CancellationToken cancellationToken)
     {
         var emailResult = Email.Create(request.Email);
         var firstNameResult = FirstName.Create(request.FirstName);
@@ -38,6 +39,6 @@ internal sealed class CreateMemeberCommnadHandler : IRequestHandler<CreateMemebe
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Unit.Value;
+        return Result.Success();
     }
 }
