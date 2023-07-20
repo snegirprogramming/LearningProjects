@@ -1,5 +1,4 @@
-﻿using Gatherly.Domain.ValueObjects;
-using MediatR;
+﻿using MediatR;
 
 namespace Gatherly.Application.Members.Commands.CreateMemeber;
 

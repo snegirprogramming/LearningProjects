@@ -20,19 +20,19 @@ internal sealed class CreateMemeberCommnadHandler : IRequestHandler<CreateMemebe
 
     public async Task<Unit> Handle(CreateMemeberCommnad request, CancellationToken cancellationToken)
     {
+        var emailResult = Email.Create(request.Email);
         var firstNameResult = FirstName.Create(request.FirstName);
+        var lastNameResult = LastName.Create(request.LastName);
 
-        if (firstNameResult.IsFailure)
-        {
-            // Log error
-            return Unit.Value;
-        }
+        var isEmailUniqueAsync = await _memberRepository
+            .IsEmailUniqueAsync(emailResult.Value, cancellationToken);
 
-        var member = new Member(
+        var member = Member.Create(
             Guid.NewGuid(),
+            emailResult.Value,
             firstNameResult.Value,
-            request.LastName,
-            request.Email);
+            lastNameResult.Value,
+            isEmailUniqueAsync);
 
         _memberRepository.Add(member);
 

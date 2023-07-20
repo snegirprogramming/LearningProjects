@@ -27,7 +27,7 @@ public sealed class FirstName : ValueObject
         {
             return Result.Failure<FirstName>(new Error(
                 "FirstName.TooLong",
-                "Firs name is too long."));
+                "First name is too long."));
         }
 
         return new FirstName(firstName);

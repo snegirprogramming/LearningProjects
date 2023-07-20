@@ -59,14 +59,6 @@ internal sealed class AcceptInvitationCommandHandler : IRequestHandler<AcceptInv
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        // Send email
-        if(invitation.Status == InvitationStatus.Accepted)
-        {
-            await _emailService.SendInvitationAcceptedEmailAsync(
-                gathering,
-                cancellationToken);
-        }
-
         return Unit.Value;
     }
 }
