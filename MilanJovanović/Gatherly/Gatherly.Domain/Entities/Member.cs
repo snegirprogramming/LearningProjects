@@ -14,6 +14,10 @@ public sealed class Member : AggregateRoot
         LastName = lastName;
     }
 
+    private Member()
+    {
+    }
+
     public Email Email { get; set; }
     public FirstName FirstName { get; set; }
     public LastName LastName { get; set; }
@@ -26,7 +30,7 @@ public sealed class Member : AggregateRoot
     {
         var member = new Member(id, email, firstName, lastName);
 
-        member.RaiseDomainEvent(new MemberRegisteredDomainEvent(member.Id));
+        member.RaiseDomainEvent(new MemberRegisteredDomainEvent(Guid.NewGuid(), member.Id));
 
         return member;
     }

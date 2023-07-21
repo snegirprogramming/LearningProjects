@@ -6,13 +6,13 @@ using MediatR;
 
 namespace Gatherly.Application.Members.Events;
 
-internal sealed class MemberRegisteredDomainEventHandler
+internal sealed class SendWelcomeEmailWhenMemberRegisteredDomainEventHander
     : INotificationHandler<MemberRegisteredDomainEvent>
 {
     private readonly IMemberRepository _memberRepository;
     private readonly IEmailService _emailService;
 
-    public MemberRegisteredDomainEventHandler(
+    public SendWelcomeEmailWhenMemberRegisteredDomainEventHander(
         IMemberRepository memberRepository,
         IEmailService emailService)
     {
@@ -20,13 +20,15 @@ internal sealed class MemberRegisteredDomainEventHandler
         _emailService = emailService;
     }
 
-    public async Task Handle(MemberRegisteredDomainEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(
+        MemberRegisteredDomainEvent notification,
+        CancellationToken cancellationToken)
     {
         Member? member = await _memberRepository.GetByIdAsync(
-            notification.MemberId,
+            notification.Id,
             cancellationToken);
 
-        if (member is null) 
+        if (member is null)
         {
             return;
         }

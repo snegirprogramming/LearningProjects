@@ -1,6 +1,7 @@
 using FluentValidation;
 using Gatherly.Application.Behaviors;
 using Gatherly.Infrastructure.BackgroundJobs;
+using Gatherly.Infrastructure.Idempotence;
 using Gatherly.Persistence;
 using Gatherly.Persistence.Interceptors;
 using MediatR;
@@ -21,6 +22,8 @@ builder
             .WithScopedLifetime());
 
 builder.Services.AddMediatR(Gatherly.Application.AssemblyReference.Assembly);
+
+builder.Services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainHandler<>));
 
 string connectionString = builder.Configuration.GetConnectionString("Database");
 
