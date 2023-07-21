@@ -10,7 +10,6 @@
     <Folder Include="Configurations\" />
     <Folder Include="Constants\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Repository\" />
   </ItemGroup>
 
   <ItemGroup>

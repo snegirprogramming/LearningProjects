@@ -7,16 +7,16 @@ namespace Gatherly.Application.Gatherings.Commands.CreateGathering;
 internal sealed class CreateGatheringCommandHandler : IRequestHandler<CreateGatheringCommand>
 {
     private readonly IMemberRepository _memberRepository;
-    private readonly IGatheringRepository _getheringRepository;
+    private readonly IGatheringRepository _gatheringRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public CreateGatheringCommandHandler(
         IMemberRepository memberRepository,
-        IGatheringRepository getheringRepository,
+        IGatheringRepository gatheringRepository,
         IUnitOfWork unitOfWork)
     {
         _memberRepository = memberRepository;
-        _getheringRepository = getheringRepository;
+        _gatheringRepository = gatheringRepository;
         _unitOfWork = unitOfWork;
     }
 
@@ -39,7 +39,7 @@ internal sealed class CreateGatheringCommandHandler : IRequestHandler<CreateGath
             request.MaximumNumberOfAttendees,
             request.InvitationsValidBeforeInHours);
 
-        _getheringRepository.Add(gathering);
+        _gatheringRepository.Add(gathering);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
