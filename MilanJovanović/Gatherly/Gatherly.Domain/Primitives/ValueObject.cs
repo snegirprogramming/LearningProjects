@@ -1,27 +1,67 @@
 ﻿namespace Gatherly.Domain.Primitives;
 
+/// <summary>
+/// Represents the base class all value objects derive from.
+/// </summary>
 public abstract class ValueObject : IEquatable<ValueObject>
 {
-    public abstract IEnumerable<object> GetAtomicValues();
-
-    public bool Equals(ValueObject? other)
+    public static bool operator ==(ValueObject a, ValueObject b)
     {
-        return other is not null && ValuesAreEqual(other);
+        if (a is null && b is null)
+        {
+            return true;
+        }
+
+        if (a is null || b is null)
+        {
+            return false;
+        }
+
+        return a.Equals(b);
     }
 
-    public override bool Equals(object? obj)
+    public static bool operator !=(ValueObject a, ValueObject b) => !(a == b);
+
+    /// <inheritdoc />
+    public bool Equals(ValueObject other) => !(other is null) && GetAtomicValues().SequenceEqual(other.GetAtomicValues());
+
+    /// <inheritdoc />
+    public override bool Equals(object obj)
     {
-        return obj is ValueObject other && ValuesAreEqual(other);
+        if (obj == null)
+        {
+            return false;
+        }
+
+        if (GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        if (!(obj is ValueObject valueObject))
+        {
+            return false;
+        }
+
+        return GetAtomicValues().SequenceEqual(valueObject.GetAtomicValues());
     }
 
+    /// <inheritdoc />
     public override int GetHashCode()
     {
-        return GetAtomicValues()
-            .Aggregate(default(int), HashCode.Combine);
+        HashCode hashCode = default;
+
+        foreach (object obj in GetAtomicValues())
+        {
+            hashCode.Add(obj);
+        }
+
+        return hashCode.ToHashCode();
     }
 
-    private bool ValuesAreEqual(ValueObject other)
-    {
-        return GetAtomicValues().SequenceEqual(other.GetAtomicValues());
-    }
+    /// <summary>
+    /// Gets the atomic values of the value object.
+    /// </summary>
+    /// <returns>The collection of objects representing the value object values.</returns>
+    protected abstract IEnumerable<object> GetAtomicValues();
 }

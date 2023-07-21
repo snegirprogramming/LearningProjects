@@ -7,6 +7,10 @@ public abstract class Entity : IEquatable<Entity>
         Id = id;
     }
 
+    protected Entity()
+    {
+    }
+
     public Guid Id { get; private init; }
 
     public static bool operator ==(Entity? first, Entity? second)
@@ -54,8 +58,5 @@ public abstract class Entity : IEquatable<Entity>
         return other.Id == Id;
     }
 
-    public override int GetHashCode()
-    {
-        return Id.GetHashCode();
-    }
+    public override int GetHashCode() => Id.GetHashCode() * 41;
 }

@@ -33,7 +33,7 @@ public sealed class FirstName : ValueObject
         return new FirstName(firstName);
     }
 
-    public override IEnumerable<object> GetAtomicValues()
+    protected override IEnumerable<object> GetAtomicValues()
     {
         yield return Value;
     }

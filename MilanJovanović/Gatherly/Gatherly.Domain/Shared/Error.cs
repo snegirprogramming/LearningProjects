@@ -2,60 +2,43 @@
 
 namespace Gatherly.Domain.Shared;
 
-public class Error : IEquatable<Error>
+/// <summary>
+/// Represents a concrete domain error.
+/// </summary>
+public sealed class Error : ValueObject
 {
-    public static readonly Error None = new(string.Empty, string.Empty);
-    public static readonly Error NullValue = new("Error.NullValue", "The specified result value is null");
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Error"/> class.
+    /// </summary>
+    /// <param name="code">The error code.</param>
+    /// <param name="message">The error message.</param>
     public Error(string code, string message)
     {
         Code = code;
         Message = message;
     }
 
+    /// <summary>
+    /// Gets the error code.
+    /// </summary>
     public string Code { get; }
+
+    /// <summary>
+    /// Gets the error message.
+    /// </summary>
     public string Message { get; }
 
-    public static implicit operator string(Error error) => error.Code;
+    public static implicit operator string(Error error) => error?.Code ?? string.Empty;
 
-    public static bool operator ==(Error? a, Error? b)
+    /// <inheritdoc />
+    protected override IEnumerable<object> GetAtomicValues()
     {
-        if (a is null && b is null)
-        {
-            return true;
-        }
-
-        if (a is null || b is null)
-        {
-            return false;
-        }
-
-        return a.Equals(b);
+        yield return Code;
+        yield return Message;
     }
 
-    public static bool operator !=(Error a, Error b) => !(a == b);
-
-    public override bool Equals(object? obj)
-    {
-        if (obj is null)
-        {
-            return false;
-        }
-
-        if (obj.GetType() != GetType())
-        {
-            return false;
-        }
-
-        if (obj is not Error error)
-        {
-            return false;
-        }
-
-        return error.Code == Code;
-    }
-
-    public bool Equals(Error? other) => throw new NotImplementedException();
+    /// <summary>
+    /// Gets the empty error instance.
+    /// </summary>
+    internal static Error None => new Error(string.Empty, string.Empty);
 }
-
-// TODO

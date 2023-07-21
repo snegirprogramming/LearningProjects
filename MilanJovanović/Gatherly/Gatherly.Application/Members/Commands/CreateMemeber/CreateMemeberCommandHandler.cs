@@ -1,12 +1,13 @@
 ﻿using Gatherly.Application.Abstractions.Messaging;
 using Gatherly.Domain.Entities;
+using Gatherly.Domain.Errors;
 using Gatherly.Domain.Repositories;
 using Gatherly.Domain.Shared;
 using Gatherly.Domain.ValueObjects;
 
 namespace Gatherly.Application.Members.Commands.CreateMemeber;
 
-internal sealed class CreateMemeberCommandHandler : ICommandHandler<CreateMemeberCommand>
+internal sealed class CreateMemeberCommandHandler : ICommandHandler<CreateMemeberCommand, Guid>
 {
     private readonly IMemberRepository _memberRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -19,26 +20,27 @@ internal sealed class CreateMemeberCommandHandler : ICommandHandler<CreateMemebe
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result> Handle(CreateMemeberCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreateMemeberCommand request, CancellationToken cancellationToken)
     {
-        var emailResult = Email.Create(request.Email);
-        var firstNameResult = FirstName.Create(request.FirstName);
-        var lastNameResult = LastName.Create(request.LastName);
+        Result<Email> emailResult = Email.Create(request.Email);
+        Result<FirstName> firstNameResult = FirstName.Create(request.FirstName);
+        Result<LastName> lastNameResult = LastName.Create(request.LastName);
 
-        var isEmailUniqueAsync = await _memberRepository
-            .IsEmailUniqueAsync(emailResult.Value, cancellationToken);
+        if (!await _memberRepository.IsEmailUniqueAsync(emailResult.Value, cancellationToken))
+        {
+            return Result.Failure<Guid>(DomainErrors.Member.EmailAlreadyInUse);
+        }
 
         var member = Member.Create(
             Guid.NewGuid(),
             emailResult.Value,
             firstNameResult.Value,
-            lastNameResult.Value,
-            isEmailUniqueAsync);
+            lastNameResult.Value);
 
         _memberRepository.Add(member);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success();
+        return member.Id;
     }
 }

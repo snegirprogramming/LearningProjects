@@ -1,7 +1,7 @@
 ﻿using Gatherly.Application.Members.Commands.CreateMemeber;
 using Gatherly.Application.Members.Queries.GetMemberById;
-using Gatherly.Domain.Shared;
 using Gatherly.Presentation.Abstractions;
+using Gatherly.Presentation.Contracts;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
