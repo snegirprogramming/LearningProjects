@@ -34,15 +34,19 @@ builder.Services.AddValidatorsFromAssembly(
 string connectionString = builder.Configuration.GetConnectionString("Database");
 
 builder.Services.AddSingleton<ConvertDomainEventsToOutboxMessagesInterceptor>();
+builder.Services.AddSingleton<UpdateAuditableEntitiesInterceptor>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(
     (sp, optionsBuilder) =>
     {
-        var interceptor = sp.GetService<ConvertDomainEventsToOutboxMessagesInterceptor>();
+        var outboxInterceptor = sp.GetService<ConvertDomainEventsToOutboxMessagesInterceptor>();
+        var auditableInterceptor = sp.GetService<UpdateAuditableEntitiesInterceptor>();
 
         optionsBuilder.UseSqlServer(connectionString,
             o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
-            .AddInterceptors(interceptor);
+            .AddInterceptors(
+                outboxInterceptor,
+                auditableInterceptor);
     });
 
 builder.Services.AddQuartz(configure =>

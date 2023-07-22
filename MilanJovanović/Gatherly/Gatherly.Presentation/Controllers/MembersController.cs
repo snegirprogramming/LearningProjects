@@ -1,4 +1,4 @@
-﻿using Gatherly.Application.Members.Commands.CreateMemeber;
+﻿using Gatherly.Application.Members.Commands.CreateMember;
 using Gatherly.Application.Members.Queries.GetMemberById;
 using Gatherly.Presentation.Abstractions;
 using Gatherly.Presentation.Contracts;
@@ -30,7 +30,7 @@ public sealed class MembersController : ApiController
         [FromBody] RegisterMemberRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new CreateMemeberCommand(
+        var command = new CreateMemberCommand(
             request.Email,
             request.FirstName,
             request.LastName);

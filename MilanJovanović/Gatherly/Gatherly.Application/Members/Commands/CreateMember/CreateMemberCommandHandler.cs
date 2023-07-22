@@ -5,14 +5,14 @@ using Gatherly.Domain.Repositories;
 using Gatherly.Domain.Shared;
 using Gatherly.Domain.ValueObjects;
 
-namespace Gatherly.Application.Members.Commands.CreateMemeber;
+namespace Gatherly.Application.Members.Commands.CreateMember;
 
-internal sealed class CreateMemeberCommandHandler : ICommandHandler<CreateMemeberCommand, Guid>
+internal sealed class CreateMemberCommandHandler : ICommandHandler<CreateMemberCommand, Guid>
 {
     private readonly IMemberRepository _memberRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateMemeberCommandHandler(
+    public CreateMemberCommandHandler(
         IMemberRepository memberRepository,
         IUnitOfWork unitOfWork)
     {
@@ -20,7 +20,7 @@ internal sealed class CreateMemeberCommandHandler : ICommandHandler<CreateMemebe
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result<Guid>> Handle(CreateMemeberCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreateMemberCommand request, CancellationToken cancellationToken)
     {
         Result<Email> emailResult = Email.Create(request.Email);
         Result<FirstName> firstNameResult = FirstName.Create(request.FirstName);
