@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using FluentValidation.TestHelper;
 using Gatherly.Domain.Shared;
 using MediatR;
 
