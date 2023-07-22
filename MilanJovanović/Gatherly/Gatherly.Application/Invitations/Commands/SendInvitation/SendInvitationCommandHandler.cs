@@ -1,4 +1,5 @@
 ﻿using Gatherly.Application.Abstractions;
+using Gatherly.Application.Abstractions.Messaging;
 using Gatherly.Domain.Entities;
 using Gatherly.Domain.Repositories;
 using Gatherly.Domain.Shared;
@@ -6,7 +7,7 @@ using MediatR;
 
 namespace Gatherly.Application.Invitations.Commands.SendInvitation;
 
-internal sealed class SendInvitationCommandHandler : IRequestHandler<SendInvitationCommand>
+internal sealed class SendInvitationCommandHandler : ICommandHandler<SendInvitationCommand>
 {
     private readonly IMemberRepository _memberRepository;
     private readonly IGatheringRepository _gatheringRepository;
@@ -28,7 +29,7 @@ internal sealed class SendInvitationCommandHandler : IRequestHandler<SendInvitat
         _emailService = emailService;
     }
 
-    public async Task<Unit> Handle(SendInvitationCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(SendInvitationCommand request, CancellationToken cancellationToken)
     {
         var member = await _memberRepository.GetByIdAsync(request.MemberId, cancellationToken);
 
@@ -37,7 +38,7 @@ internal sealed class SendInvitationCommandHandler : IRequestHandler<SendInvitat
 
         if (member is null || gathering is null)
         {
-            return Unit.Value;
+            return Result.Failure(new Error("", ""));
         }
 
         Result<Invitation> invitationResult = gathering.SendInvitation(member);
@@ -45,7 +46,7 @@ internal sealed class SendInvitationCommandHandler : IRequestHandler<SendInvitat
         if (invitationResult.IsFailure)
         {
             // Log error
-            return Unit.Value;
+            return invitationResult;
         }
 
         _invitationRepository.Add(invitationResult.Value);
@@ -55,6 +56,6 @@ internal sealed class SendInvitationCommandHandler : IRequestHandler<SendInvitat
         // Send email
         await _emailService.SendInvitationSentEmailAsync(member, gathering, cancellationToken);
 
-        return Unit.Value;
+        return Result.Success();
     }
 }

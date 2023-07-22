@@ -23,7 +23,13 @@ builder
 
 builder.Services.AddMediatR(Gatherly.Application.AssemblyReference.Assembly);
 
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+
 builder.Services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainHandler<>));
+
+builder.Services.AddValidatorsFromAssembly(
+    Gatherly.Application.AssemblyReference.Assembly,
+    includeInternalTypes: true);
 
 string connectionString = builder.Configuration.GetConnectionString("Database");
 
@@ -33,7 +39,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     (sp, optionsBuilder) =>
     {
         var interceptor = sp.GetService<ConvertDomainEventsToOutboxMessagesInterceptor>();
-        optionsBuilder.UseSqlServer(connectionString)
+
+        optionsBuilder.UseSqlServer(connectionString,
+            o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
             .AddInterceptors(interceptor);
     });
 
@@ -46,18 +54,13 @@ builder.Services.AddQuartz(configure =>
         .AddTrigger(trigger => trigger
             .ForJob(jobKey)
             .WithSimpleSchedule(schedule => schedule
-                .WithIntervalInSeconds(10)
+                .WithIntervalInSeconds(100)
                 .RepeatForever()));
 
     configure.UseMicrosoftDependencyInjectionJobFactory();
 });
 
 builder.Services.AddQuartzHostedService();
-
-builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
-
-builder.Services.AddValidatorsFromAssembly(Gatherly.Application.AssemblyReference.Assembly,
-    includeInternalTypes: true);
 
 builder
     .Services

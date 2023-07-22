@@ -20,14 +20,14 @@ public static class DomainErrors
 
         public static Error NotFound(Guid id) => new Error(
             "Gathering.NotFound",
-            $"The gathering with the id: {id} was not found.");
+            $"The gathering with the identifier {id} was not found.");
     }
 
     public static class Invitation
     {
         public static Error AlreadyAccepted(Guid id) => new Error(
             "Invitation.AlreadyAccepted",
-            $"The invitation with the id: {id} is already accepted.");
+            $"The invitation with the identifier {id} is already accepted.");
     }
 
     public static class Member

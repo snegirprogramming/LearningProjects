@@ -8,19 +8,38 @@ internal sealed class GatheringRepository : IGatheringRepository
 {
     private readonly ApplicationDbContext _dbContext;
 
-    public GatheringRepository(ApplicationDbContext dbContext)
-    {
+    public GatheringRepository(ApplicationDbContext dbContext) =>
         _dbContext = dbContext;
+
+    public async Task<Gathering?> GetByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default)
+    {
+        Gathering? gathering = await _dbContext
+            .Set<Gathering>()
+            .AsSingleQuery()
+            .Include(gathering => gathering.Creator)
+            .Include(gathering => gathering.Creator)
+            .Include(gathering => gathering.Creator)
+            .FirstOrDefaultAsync(
+                gathering => gathering.Id == id,
+                cancellationToken);
+
+        return gathering;
     }
 
-    public async Task<Gathering?> GetByIdWithCreatorAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Gathering?> GetByIdWithCreatorAsync(
+        Guid id,
+        CancellationToken cancellationToken = default)
     {
         return await _dbContext.Set<Gathering>()
             .Include(g => g.Creator)
             .FirstOrDefaultAsync(g => g.Id == id, cancellationToken);
     }
 
-    public async Task<Gathering?> GetByIdWithInvitationsAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Gathering?> GetByIdWithInvitationsAsync(
+        Guid id,
+        CancellationToken cancellationToken = default)
     {
         return await _dbContext.Set<Gathering>()
             .Include(g => g.Invitations)

@@ -1,14 +1,12 @@
-﻿using Gatherly.Application.Abstractions;
-using Gatherly.Domain.Entities;
+﻿using Gatherly.Application.Abstractions.Messaging;
 using Gatherly.Domain.Enums;
 using Gatherly.Domain.Errors;
 using Gatherly.Domain.Repositories;
 using Gatherly.Domain.Shared;
-using MediatR;
 
 namespace Gatherly.Application.Invitations.Commands.AcceptInvitation;
 
-internal sealed class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCommand>
+internal sealed class AcceptInvitationCommandHandler : ICommandHandler<AcceptInvitationCommand>
 {
     private readonly IGatheringRepository _gatheringRepository;
     private readonly IAttendeeRepository _attendeeRepository;
