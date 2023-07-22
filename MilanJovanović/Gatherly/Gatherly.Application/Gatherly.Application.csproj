@@ -11,8 +11,12 @@
     <PackageReference Include="MediatR" Version="10.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Gatherly.Domain\Gatherly.Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<InternalsVisibleTo Include="Gatherly.Application.UnitTests" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Gatherly.Domain\Gatherly.Domain.csproj" />
+	</ItemGroup>
 
 </Project>
