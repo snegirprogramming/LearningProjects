@@ -49,7 +49,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
         var auditableInterceptor = sp.GetService<UpdateAuditableEntitiesInterceptor>();
 
         optionsBuilder.UseSqlServer(connectionString,
-            o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
+            o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery))
             .AddInterceptors(
                 outboxInterceptor,
                 auditableInterceptor);
