@@ -9,16 +9,16 @@ namespace Gatherly.Persistence.Interceptors;
 public sealed class ConvertDomainEventsToOutboxMessagesInterceptor
     : SaveChangesInterceptor
 {
-    public override ValueTask<int> SavedChangesAsync(
-        SaveChangesCompletedEventData eventData,
-        int result,
+    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
+        DbContextEventData eventData,
+        InterceptionResult<int> result,
         CancellationToken cancellationToken = default)
     {
         DbContext? dbContext = eventData.Context;
 
         if (dbContext is null)
         {
-            return base.SavedChangesAsync(eventData, result, cancellationToken);
+            return base.SavingChangesAsync(eventData, result, cancellationToken);
         }
 
         var outboxMessages = dbContext
@@ -47,6 +47,6 @@ public sealed class ConvertDomainEventsToOutboxMessagesInterceptor
 
         dbContext.Set<OutboxMessage>().AddRange(outboxMessages);
 
-        return base.SavedChangesAsync(eventData, result, cancellationToken);
+        return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 }

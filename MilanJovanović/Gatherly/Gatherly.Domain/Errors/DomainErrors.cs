@@ -35,5 +35,9 @@ public static class DomainErrors
         public static Error EmailAlreadyInUse => new Error(
             "Member.EmailAlreadyInUse",
             "Email is already in use.");
+
+        public static Error NotFound(Guid id) => new Error(
+            "Member.NotFound",
+            $"The member with the identifier {id} was not found.");
     }
 }

@@ -8,16 +8,16 @@ namespace Gatherly.Persistence.Interceptors
     public sealed class UpdateAuditableEntitiesInterceptor
         : SaveChangesInterceptor
     {
-        public override ValueTask<int> SavedChangesAsync(
-            SaveChangesCompletedEventData eventData,
-            int result,
+        public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
+            DbContextEventData eventData,
+            InterceptionResult<int> result,
             CancellationToken cancellationToken = default)
         {
             DbContext? dbContext = eventData.Context;
 
             if (dbContext is null)
             {
-                return base.SavedChangesAsync(eventData, result, cancellationToken);
+                return base.SavingChangesAsync(eventData, result, cancellationToken);
             }
 
             IEnumerable<EntityEntry<IAuditableEntity>> entries =
@@ -38,7 +38,7 @@ namespace Gatherly.Persistence.Interceptors
                 }
             }
 
-            return base.SavedChangesAsync(eventData, result, cancellationToken);
+            return base.SavingChangesAsync(eventData, result, cancellationToken);
         }
     }
 }
