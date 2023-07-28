@@ -18,9 +18,9 @@ public sealed class Member : AggregateRoot, IAuditableEntity
     {
     }
 
-    public Email Email { get; set; }
-    public FirstName FirstName { get; set; }
-    public LastName LastName { get; set; }
+    public Email Email { get; private set; }
+    public FirstName FirstName { get; private set; }
+    public LastName LastName { get; private set; }
     public DateTime CreatedOnUtc { get; set; }
     public DateTime? ModifiedOnUtc { get; set; }
 
