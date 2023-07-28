@@ -1,4 +1,5 @@
-﻿using Gatherly.Domain.Primitives;
+﻿using Gatherly.Domain.Errors;
+using Gatherly.Domain.Primitives;
 using Gatherly.Domain.Shared;
 
 namespace Gatherly.Domain.ValueObjects;
@@ -14,24 +15,18 @@ public sealed class Email : ValueObject
 
     public string Value { get; }
 
-    public static Result<Email> Create(string email)
-    {
-        if (string.IsNullOrWhiteSpace(email))
-        {
-            return Result.Failure<Email>(new Error(
-                "Email.Empty",
-                "Last name is empty."));
-        }
-
-        if (email.Length > MaxLength)
-        {
-            return Result.Failure<Email>(new Error(
-                "Email.TooLong",
-                "Last name is too long."));
-        }
-
-        return new Email(email);
-    }
+    public static Result<Email> Create(string email) =>
+        Result.Create(email)
+            .Ensure(
+                e => !string.IsNullOrWhiteSpace(e),
+                DomainErrors.Email.Empty)
+            .Ensure(
+                e => e.Length <= MaxLength,
+                DomainErrors.Email.TooLong)
+            .Ensure(
+                e => e.Split('@').Length == 2,
+                DomainErrors.Email.InvalidFormat)
+            .Map(e => new Email(e));
 
     protected override IEnumerable<object> GetAtomicValues()
     {

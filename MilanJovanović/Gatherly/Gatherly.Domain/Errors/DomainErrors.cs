@@ -40,4 +40,19 @@ public static class DomainErrors
             "Member.NotFound",
             $"The member with the identifier {id} was not found.");
     }
+
+    public static class Email
+    {
+        public static Error Empty => new Error(
+            "Email.Empty",
+            "Email is empty.");
+
+        public static Error TooLong => new Error(
+            "Email.TooLong",
+            "Email is too long.");
+
+        public static Error InvalidFormat => new Error(
+            "Email.InvalidFormat",
+            "Email has invalid format.");
+    }
 }
