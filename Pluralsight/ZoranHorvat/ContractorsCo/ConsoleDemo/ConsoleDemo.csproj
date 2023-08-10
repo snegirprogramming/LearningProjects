@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Using Include="ConsoleDemo" />
     <Using Include="System.Text" />
     <Using Include="Models" />
     <Using Include="Models.Common" />
