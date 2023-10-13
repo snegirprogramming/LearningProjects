@@ -30,7 +30,7 @@ namespace Gatherly.App.Middlewares
                     Status = (int)HttpStatusCode.InternalServerError,
                     Type = "Server error",
                     Title = "Server error",
-                    Detail = "An internal server has occurred"
+                    Detail = "An internal server error has occurred."
                 };
 
                 string json = JsonSerializer.Serialize(problem);

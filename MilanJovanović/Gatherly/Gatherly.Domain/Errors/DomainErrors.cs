@@ -39,6 +39,10 @@ public static class DomainErrors
         public static Error NotFound(Guid id) => new Error(
             "Member.NotFound",
             $"The member with the identifier {id} was not found.");
+
+        public static Error InvalidCredentials => new Error(
+            "Member.InvalidCredentials",
+            "Email credentials are not valid.");
     }
 
     public static class Email

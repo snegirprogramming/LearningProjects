@@ -1,5 +1,6 @@
 using FluentValidation;
 using Gatherly.App.Middlewares;
+using Gatherly.App.OptionsSetup;
 using Gatherly.Application.Behaviors;
 using Gatherly.Domain.Repositories;
 using Gatherly.Infrastructure.BackgroundJobs;
@@ -8,6 +9,7 @@ using Gatherly.Persistence;
 using Gatherly.Persistence.Interceptors;
 using Gatherly.Persistence.Repository;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
 
@@ -80,6 +82,12 @@ builder
 
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer();
+
+builder.Services.ConfigureOptions<JwtOptionsSetup>();
+builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
+
 builder.Services.AddLogging();
 
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
@@ -93,6 +101,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

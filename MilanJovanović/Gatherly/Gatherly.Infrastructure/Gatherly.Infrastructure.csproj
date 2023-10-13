@@ -13,6 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Polly" Version="7.2.3" />
     <PackageReference Include="Quartz" Version="3.4.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.0" />
   </ItemGroup>
 
   <ItemGroup>

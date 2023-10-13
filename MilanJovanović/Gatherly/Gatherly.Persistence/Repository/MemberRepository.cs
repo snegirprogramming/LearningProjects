@@ -14,7 +14,9 @@ public sealed class MemberRepository : IMemberRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Member?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
+    public async Task<Member?> GetByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default) =>
         await _dbContext
             .Set<Member>()
             .FirstOrDefaultAsync(member => member.Id == id, cancellationToken);
@@ -33,4 +35,11 @@ public sealed class MemberRepository : IMemberRepository
     public void Update(Member member) =>
         _dbContext.Set<Member>()
         .Update(member);
+
+    public async Task<Member?> GetByEmailAsync(
+        Email email,
+        CancellationToken cancellationToken = default) =>
+        await _dbContext
+            .Set<Member>()
+            .FirstOrDefaultAsync(member => member.Email == email, cancellationToken);
 }
